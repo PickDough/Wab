@@ -1,0 +1,43 @@
+
+# Ignore build output directories
+bin/
+obj/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider settings
+.idea/
+.DS_Store
+
+# Ignore NuGet packages folder
+packages/
+*.nupkg
+# Uncomment if you have NuGet Packages in subfolders
+# **/packages
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Application Insights folder
+ApplicationInsights.config
+
+# Rider Plugin Files
+.idea/ride-ws.xml
+.idea/RiderProjectCommonData.xml
+
+# Work folders
+.vscode/
+.history/
+
+# Rider / ReSharper / NxOpen file patterns
+_Resharper*/
+*.Usr
+*_UpgradeLog.HTML
+*_UpgradeLog.XML
