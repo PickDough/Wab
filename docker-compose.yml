@@ -1,0 +1,32 @@
+services:
+  web:
+    build:
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_URLS=http://*:8080 
+      - ASPNETCORE_ENVIRONMENT=Staging
+      - DOTNET_ENVIRONMENT=Staging
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: wab-user
+      POSTGRES_PASSWORD: wab-password
+      POSTGRES_DB: wab-db
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U wab-user -d wab-db" ]
+      interval: 1s
+      timeout: 1s
+      retries: 10
+
+volumes:
+  dbdata:
