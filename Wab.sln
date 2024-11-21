@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wab.Core", "Wab.Core\Wab.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wab.DbContext", "Wab.DbContext\Wab.DbContext.csproj", "{6F0D3D87-045C-44C3-93BF-98874B737189}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wab.Core.Test", "Wab.Core.Test\Wab.Core.Test.csproj", "{15D975A7-B08C-4C78-9BAC-5D3D967A2A45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{6F0D3D87-045C-44C3-93BF-98874B737189}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F0D3D87-045C-44C3-93BF-98874B737189}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F0D3D87-045C-44C3-93BF-98874B737189}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15D975A7-B08C-4C78-9BAC-5D3D967A2A45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15D975A7-B08C-4C78-9BAC-5D3D967A2A45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15D975A7-B08C-4C78-9BAC-5D3D967A2A45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15D975A7-B08C-4C78-9BAC-5D3D967A2A45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
