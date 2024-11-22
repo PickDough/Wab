@@ -1,8 +1,10 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using Wab.Core.Domain;
 
 namespace Wab.DbContext.Entity;
 
+[Index(nameof(Date))]
 public class TransactionEntity
 {
     public Guid Id { get; set; }

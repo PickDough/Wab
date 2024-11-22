@@ -41,11 +41,12 @@ public class Transaction
     public DateTime Date { get; }
     public TransactionStatus Status { get; }
     public User AuthorizedUser { get; }
-
     public string? Description { get; init; }
+
+    public bool IsByCardHolder => AuthorizedUser.Id == Card.UserId;
 
     public bool IsAuthorized(Guid userId)
     {
-        return AuthorizedUser.Id == userId && Card.UserId == userId;
+        return AuthorizedUser.Id == userId || Card.UserId == userId;
     }
 }
