@@ -4,9 +4,18 @@ namespace Wab.Core.Service.DailyPoint;
 
 public class SeasonPointCalculator : IPointCalculator
 {
+    public static BigInteger FirstDayPoints = 2;
+    public static BigInteger SecondDayPoints = 3;
+    private readonly Func<DateTime> _now;
+
+    public SeasonPointCalculator(Func<DateTime> now)
+    {
+        _now = now;
+    }
+
     public BigInteger Calculate(DateTime cardObtainedDate)
     {
-        var today = DateTime.Today;
+        var today = _now();
         var dayInSeason = GetDayInSeason(today);
         var points = CalculatePoints(dayInSeason);
         return points;
@@ -31,19 +40,22 @@ public class SeasonPointCalculator : IPointCalculator
 
     private static BigInteger CalculatePoints(int dayInSeason)
     {
-        const int dayBeforeYesterdayPoints = 2;
-        if (dayInSeason == 1) return dayBeforeYesterdayPoints;
-        const int yesterdayPoints = dayBeforeYesterdayPoints + 3;
-        if (dayInSeason == 2) return yesterdayPoints;
+        switch (dayInSeason)
+        {
+            case 1:
+                return FirstDayPoints;
+            case 2:
+                return FirstDayPoints + SecondDayPoints;
+        }
 
         var lastThreeDays = new LinkedList<BigInteger>();
-        lastThreeDays.AddLast(dayBeforeYesterdayPoints);
-        lastThreeDays.AddLast(yesterdayPoints);
+        lastThreeDays.AddLast(FirstDayPoints);
+        lastThreeDays.AddLast(FirstDayPoints + SecondDayPoints);
 
         for (var i = 2; i < dayInSeason; i++)
         {
-            lastThreeDays.AddLast(lastThreeDays.First!.Value +
-                                  (BigInteger)((float)lastThreeDays.First!.Next!.Value * 0.6));
+            lastThreeDays.AddLast(lastThreeDays.First!.Next!.Value + (lastThreeDays.First!.Value +
+                                                                      lastThreeDays.First!.Next!.Value * 6 / 10));
             lastThreeDays.RemoveFirst();
         }
 
