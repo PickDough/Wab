@@ -2,9 +2,9 @@ using System.Numerics;
 
 namespace Wab.Core.Domain;
 
-public class UserCompound
+public class UserCompoundDto
 {
-    public UserCompound(User user, Card primaryCard, BigInteger dailyPoints)
+    public UserCompoundDto(User user, Card primaryCard, BigInteger dailyPoints)
     {
         User = user;
         PrimaryCard = primaryCard;

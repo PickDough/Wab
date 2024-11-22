@@ -50,7 +50,7 @@ public class SeasonPointCalculatorTest
 
         return td;
 
-        BigInteger Calc(BigInteger previousPoints, BigInteger currentPoints)
+        long Calc(long previousPoints, long currentPoints)
         {
             return currentPoints + (previousPoints + currentPoints * 6 / 10);
         }

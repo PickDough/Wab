@@ -12,7 +12,7 @@ using Wab.DbContext;
 namespace Wab.DbContext.Migrations
 {
     [DbContext(typeof(WabDbContext))]
-    [Migration("20241122132407_Initial")]
+    [Migration("20241122150639_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -66,6 +66,48 @@ namespace Wab.DbContext.Migrations
                     b.ToTable("PaymentDue");
                 });
 
+            modelBuilder.Entity("Wab.DbContext.Entity.TransactionEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("money");
+
+                    b.Property<Guid>("AuthorizedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CardId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorizedUserId");
+
+                    b.HasIndex("CardId");
+
+                    b.HasIndex("Date");
+
+                    b.ToTable("Transactions");
+                });
+
             modelBuilder.Entity("Wab.DbContext.Entity.UserEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -82,12 +124,7 @@ namespace Wab.DbContext.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<Guid?>("PaymentDueId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("PaymentDueId");
 
                     b.ToTable("User");
                 });
@@ -114,13 +151,23 @@ namespace Wab.DbContext.Migrations
                     b.Navigation("Card");
                 });
 
-            modelBuilder.Entity("Wab.DbContext.Entity.UserEntity", b =>
+            modelBuilder.Entity("Wab.DbContext.Entity.TransactionEntity", b =>
                 {
-                    b.HasOne("Wab.DbContext.Entity.PaymentDueEntity", "PaymentDue")
+                    b.HasOne("Wab.DbContext.Entity.UserEntity", "AuthorizedUser")
                         .WithMany()
-                        .HasForeignKey("PaymentDueId");
+                        .HasForeignKey("AuthorizedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("PaymentDue");
+                    b.HasOne("Wab.DbContext.Entity.CardEntity", "Card")
+                        .WithMany()
+                        .HasForeignKey("CardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AuthorizedUser");
+
+                    b.Navigation("Card");
                 });
 
             modelBuilder.Entity("Wab.DbContext.Entity.UserEntity", b =>

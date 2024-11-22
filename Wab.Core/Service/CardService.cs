@@ -17,10 +17,16 @@ public class CardService
     {
         var card = _cardRepository.GetById(id);
         if (card is null)
-            throw new NotFoundException(id, nameof(Card));
+            throw new CoreException
+            {
+                Detail = new CoreExceptionDetail.NotFound(id, nameof(Card))
+            };
 
         if (!card.IsAuthorized(userId))
-            throw new UnauthorizedException(userId, nameof(Card));
+            throw new CoreException
+            {
+                Detail = new CoreExceptionDetail.Unauthorized(userId, nameof(Card))
+            };
 
         return card;
     }
@@ -29,7 +35,10 @@ public class CardService
     {
         var primaryCard = _cardRepository.GetUserPrimaryCard(userId);
         if (primaryCard is null)
-            throw new NotFoundException(userId, nameof(Card));
+            throw new CoreException
+            {
+                Detail = new CoreExceptionDetail.NotFound(userId, nameof(Card))
+            };
 
         return primaryCard;
     }

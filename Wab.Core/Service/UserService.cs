@@ -22,14 +22,17 @@ public class UserService
     {
         var user = _userRepository.GetById(id);
         if (user is null)
-            throw new NotFoundException(id, nameof(User));
+            throw new CoreException
+            {
+                Detail = new CoreExceptionDetail.NotFound(id, nameof(User))
+            };
 
         return user;
     }
 
-    public UserCompound GetFullInformation(Guid id)
+    public UserCompoundDto GetCompoundById(Guid id)
     {
-        return new UserCompound(GetById(id), _cardService.GetUserPrimaryCard(id),
+        return new UserCompoundDto(GetById(id), _cardService.GetUserPrimaryCard(id),
             _pointCalculator.Calculate(DateTime.Now));
     }
 }

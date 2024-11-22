@@ -1,5 +1,4 @@
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Wab.Core.Domain;
 using Wab.Core.Repository;
 using Wab.DbContext.Entity;
@@ -8,22 +7,28 @@ namespace Wab.DbContext.Repository;
 
 public class CardRepository : ICardRepository
 {
-    private readonly Mapper _mapper;
-    private readonly DbSet<CardEntity> _set;
+    private readonly WabDbContext _db;
+    private readonly IMapper _mapper;
 
-    public CardRepository(Mapper mapper, DbSet<CardEntity> set)
+    public CardRepository(IMapper mapper, WabDbContext db)
     {
         _mapper = mapper;
-        _set = set;
+        _db = db;
     }
 
     public Card? GetById(Guid id)
     {
-        return _mapper.Map<CardEntity?, Card?>(_set.FirstOrDefault(c => c.Id == id));
+        return _mapper.Map<CardEntity?, Card?>(_db.Cards.FirstOrDefault(c => c.Id == id));
     }
 
     public Card? GetUserPrimaryCard(Guid userId)
     {
-        return _mapper.Map<CardEntity?, Card>(_set.MinBy(c => c.DateObtained));
+        var cardEntities = from card in _db.Cards
+            join user in _db.Users
+                on card.UserId equals user.Id
+            where user.Id == userId
+            orderby card.DateObtained
+            select card;
+        return _mapper.Map<CardEntity?, Card>(cardEntities.FirstOrDefault());
     }
 }

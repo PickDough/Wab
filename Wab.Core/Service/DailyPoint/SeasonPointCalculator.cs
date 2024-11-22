@@ -1,11 +1,9 @@
-using System.Numerics;
-
 namespace Wab.Core.Service.DailyPoint;
 
 public class SeasonPointCalculator : IPointCalculator
 {
-    public static BigInteger FirstDayPoints = 2;
-    public static BigInteger SecondDayPoints = 3;
+    public static long FirstDayPoints = 2;
+    public static long SecondDayPoints = 3;
     private readonly Func<DateTime> _now;
 
     public SeasonPointCalculator(Func<DateTime> now)
@@ -13,7 +11,7 @@ public class SeasonPointCalculator : IPointCalculator
         _now = now;
     }
 
-    public BigInteger Calculate(DateTime cardObtainedDate)
+    public long Calculate(DateTime cardObtainedDate)
     {
         var today = _now();
         var dayInSeason = GetDayInSeason(today);
@@ -38,7 +36,7 @@ public class SeasonPointCalculator : IPointCalculator
         };
     }
 
-    private static BigInteger CalculatePoints(int dayInSeason)
+    private static long CalculatePoints(int dayInSeason)
     {
         switch (dayInSeason)
         {
@@ -48,7 +46,7 @@ public class SeasonPointCalculator : IPointCalculator
                 return FirstDayPoints + SecondDayPoints;
         }
 
-        var lastThreeDays = new LinkedList<BigInteger>();
+        var lastThreeDays = new LinkedList<long>();
         lastThreeDays.AddLast(FirstDayPoints);
         lastThreeDays.AddLast(FirstDayPoints + SecondDayPoints);
 

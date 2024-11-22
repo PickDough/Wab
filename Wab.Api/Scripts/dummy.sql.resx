@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <data name="Sql" xml:space="preserve">
+    <value>
+-- Inserting 1 user
+INSERT INTO "User" ("Id", "FirstName", "LastName")
+VALUES ('fcd53426-9e1f-4717-95f1-869c52a24d35'::uuid, 'John', 'Doe')
+ON CONFLICT DO NOTHING;
+
+-- Inserting 2 cards
+INSERT INTO "Card" ("Id", "UserId", "Balance", "DateObtained")
+VALUES ('a51a5e66-4165-429d-9237-a9946285550f'::uuid, 'fcd53426-9e1f-4717-95f1-869c52a24d35'::uuid, 1000::money, NOW()),
+       ('6462785f-8b52-4004-bca2-52860553ef8b'::uuid, 'fcd53426-9e1f-4717-95f1-869c52a24d35'::uuid, 500::money, NOW())
+ON CONFLICT DO NOTHING;
+
+-- Inserting 6 payment dues (2 for each card)
+INSERT INTO "PaymentDue" ("Id", "CardId", "Month")
+VALUES ('a597372a-7afc-4a23-845f-3121f645429c'::uuid, 'a51a5e66-4165-429d-9237-a9946285550f'::uuid, NOW()),
+       ('d482c518-0c79-4661-9275-5f5d90c7c59e'::uuid, 'a51a5e66-4165-429d-9237-a9946285550f'::uuid,
+        NOW() + interval '1 month'),
+       ('8a59f5f1-0b44-4667-97f4-e67403b6a68c'::uuid, '6462785f-8b52-4004-bca2-52860553ef8b'::uuid, NOW()),
+       ('7483f61e-71c5-466f-a296-5250929a1775'::uuid, '6462785f-8b52-4004-bca2-52860553ef8b'::uuid,
+        NOW() + interval '1 month') ON CONFLICT DO NOTHING;
+
+-- Inserting 20 transactions
+INSERT INTO "Transactions" ("Id", "CardId", "Type", "Amount", "Name", "Date", "Status", "Description",
+                            "AuthorizedUserId")
+SELECT gen_random_uuid(),
+       (ARRAY ['a51a5e66-4165-429d-9237-a9946285550f'::uuid, '6462785f-8b52-4004-bca2-52860553ef8b'::uuid])[floor(random() * 2 + 1)],
+       floor(random() * 2),
+       (random() * 100 + 1)::numeric::money,
+       'Transaction ' || i,
+       NOW() - interval '7 days' + interval '1 hour' * i,
+       floor(random() * 2),
+       'Description ' || i,
+       'fcd53426-9e1f-4717-95f1-869c52a24d35'::uuid
+FROM generate_series(1, 20) AS i
+ON CONFLICT DO NOTHING;
+    </value>
+  </data>
+</root>

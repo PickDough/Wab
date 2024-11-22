@@ -9,7 +9,8 @@ public class WabDbContext : Microsoft.EntityFrameworkCore.DbContext
     {
     }
 
-    public DbSet<UserEntity> Clients { get; set; }
+    public DbSet<UserEntity> Users { get; set; }
     public DbSet<CardEntity> Cards { get; set; }
     public DbSet<PaymentDueEntity> PaymentDues { get; set; }
+    public DbSet<TransactionEntity> Transactions { get; set; }
 }

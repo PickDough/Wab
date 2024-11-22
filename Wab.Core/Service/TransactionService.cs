@@ -1,5 +1,6 @@
 using Wab.Core.Domain;
 using Wab.Core.Domain.Exception;
+using Wab.Core.Dto;
 using Wab.Core.Repository;
 
 namespace Wab.Core.Service;
@@ -19,19 +20,27 @@ public class TransactionService
     {
         var transaction = _transactionRepository.GetById(id);
         if (transaction is null)
-            throw new NotFoundException(id, nameof(Transaction));
+            throw new CoreException
+            {
+                Detail = new CoreExceptionDetail.NotFound(id, nameof(Transaction))
+            };
 
         if (!transaction.IsAuthorized(userId))
-            throw new UnauthorizedException(userId, nameof(Transaction));
+            throw new CoreException
+            {
+                Detail = new CoreExceptionDetail.Unauthorized(userId, nameof(Transaction))
+            };
 
         return transaction;
     }
 
-    public IEnumerable<Transaction> GetByCardId(Guid cardId, Guid userId, int page = 1, int pageSize = 10)
+    public IEnumerable<TransactionDto> GetByCardId(Guid cardId, Guid userId, int page = 1, int pageSize = 10)
     {
         var card = _cardService.GetById(cardId, userId);
         var transactions = _transactionRepository.GetByCardId(card.Id, page, pageSize);
 
-        return transactions;
+        return transactions.Select(
+            t => new TransactionDto(t)
+        );
     }
 }

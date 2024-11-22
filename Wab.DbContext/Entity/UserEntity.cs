@@ -10,5 +10,4 @@ public class UserEntity
     [MaxLength(256)] public string FirstName { get; set; } = "";
     [MaxLength(256)] public string LastName { get; set; } = "";
     public IEnumerable<CardEntity> Cards { get; set; } = new List<CardEntity>();
-    public PaymentDueEntity? PaymentDue { get; set; }
 }
